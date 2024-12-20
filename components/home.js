@@ -1,7 +1,5 @@
 
 import HeadContent from "@/components/headContent";
-import { FaDiscord, FaGithub } from "react-icons/fa";
-import { FaGear, FaRankingStar, FaYoutube } from "react-icons/fa6";
 import { signOut, useSession } from "@/components/auth/auth";
 import 'react-responsive-modal/styles.css';
 import { useEffect, useState, useRef } from "react";
@@ -55,7 +53,8 @@ import StreetView from "./streetview/streetView";
 import Stats from "stats.js";
 import SvEmbedIframe from "./streetview/svHandler";
 import Globe from "./3dHome.js/globe";
-import HomeContent from "./homeContent/homeContent";
+import HomeContent from "./homeContent/mainContent/homeContent";
+import Sidebar from "./homeContent/sideBar/sideBar";
 
 
 const initialMultiplayerState = {
@@ -82,6 +81,7 @@ const initialMultiplayerState = {
 
 export default function Home() {
   const [background, setBackground] = useState("/street1.jpg")
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const { width, height } = useWindowDimensions();
   const statsRef = useRef();
@@ -811,10 +811,12 @@ export default function Home() {
   }, [multiplayerState?.joinOptions?.error]);
 
 
+// FUNCTION THAT HANDLES ALL THE ACTIONS THAT OCCUR AFTER CLICKING BUTTONS IN THE HOME PAGE
   function handleMultiplayerAction(action, ...args) {
-    if (!ws || !multiplayerState.connected || multiplayerState.gameQueued || multiplayerState.connecting) return;
+    // if (!ws || !multiplayerState.connected || multiplayerState.gameQueued || multiplayerState.connecting) return;
 
     if (action === "publicDuel") {
+      console.log(`I am inside handling `)
       setScreen("multiplayer")
       setMultiplayerState((prev) => ({
         ...prev,
@@ -826,7 +828,7 @@ export default function Home() {
     }
 
     if (action === "joinPrivateGame") {
-
+      console.log(`inside join private game`)
       if (args[0]) {
         setScreen("multiplayer")
 
@@ -913,9 +915,9 @@ export default function Home() {
       sendEvent("multiplayer_start_game_host")
     }
 
-    if (action === 'screen') {
-      ws.send(JSON.stringify({ type: "screen", screen: args[0] }))
-    }
+    // if (action === 'screen') {
+    //   ws.send(JSON.stringify({ type: "screen", screen: args[0] }))
+    // }
 
 
   }
@@ -1869,7 +1871,7 @@ export default function Home() {
       <main className={`home`} id="main">
         {/* ALL THE UI IN THE HOMEPAGE,ALL THE TEXT AND THE BUTTONS IN THE CENTRE */}
         <div className={`home__content ${screen !== "home" ? "hidden" : ""} `}>
-          <HomeContent />
+          <HomeContent loading={loading} setScreen={setScreen} handleMultiplayerAction={handleMultiplayerAction} multiplayerState={multiplayerState} maintenance={maintenance}/>
         </div>
 
         {/* Ad BAR  */}
@@ -1882,33 +1884,19 @@ export default function Home() {
           </div>
         </div>
 
-        {/* FOOTER SECTION CONTAINING ALL THE LINKS  */}
-        {screen === "home" && !mapModal && !merchModal && !friendsModal && !accountModalOpen && !leagueModal && (
-          <div className="home__footer fixed bottom-10 left-[calc(35%)] cursor-crosshair " style={{ zIndex: "5000" }}>
-            <div className="footer_btns">
-              {/* The footer with the youtube, discord and github icons at the bottom left */}
-              {!isApp && (<>
-                <Link target="_blank" href={"https://discord.com/invite/ubdJHjKtrC"}>
-                  <button className="home__squarebtn gameBtn discord" aria-label="Discord"><FaDiscord className="home__squarebtnicon" /></button>
-                </Link>
-
-                {!inCrazyGames && (
-                  <>
-                    <Link target="_blank" href={"https://www.youtube.com/@worldguessr?sub_confirmation=1"}><button className="home__squarebtn gameBtn youtube" aria-label="Youtube"><FaYoutube className="home__squarebtnicon" /></button></Link>
-                    <Link target="_blank" href={"https://github.com/codergautam/worldguessr"}><button className="home__squarebtn gameBtn" aria-label="Github"><FaGithub className="home__squarebtnicon" /></button></Link>
-                  </>
-                )}
-                <Link href={"/leaderboard" + (inCrazyGames ? "?crazygames" : "")}>
-
-                  <button className="home__squarebtn gameBtn" aria-label="Leaderboard"><FaRankingStar className="home__squarebtnicon" /></button>
-                </Link>
-                <button className="home__squarebtn gameBtn" aria-label="Settings" onClick={() => setSettingsModal(true)}><FaGear className="home__squarebtnicon" /></button>
-              </>
-              )}
-            </div>
-          </div>
-        )}
-
+        {screen === "home" &&
+          !mapModal &&
+          !merchModal &&
+          !friendsModal &&
+          !accountModalOpen &&
+          !leagueModal && (
+            <Sidebar
+              isApp={isApp}
+              inCrazyGames={inCrazyGames}
+              setSettingsModal={setSettingsModal}
+            />
+          )
+        }
 
         <SvEmbedIframe
           nm={gameOptions?.nm}
