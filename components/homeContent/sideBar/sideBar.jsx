@@ -11,8 +11,8 @@ export default function Sidebar({ isApp, inCrazyGames, setSettingsModal }) {
     const [isSocialsOpen, setIsSocialsOpen] = useState(false);
     const [isOtherOpen, setIsOtherOpen] = useState(false);
 
-    const sideBarRef=useRef();
-    const sideBtnRef=useRef();
+    const sideBarRef = useRef();
+    const sideBtnRef = useRef();
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
     const toggleSocials = () => setIsSocialsOpen(!isSocialsOpen);
@@ -21,20 +21,22 @@ export default function Sidebar({ isApp, inCrazyGames, setSettingsModal }) {
     useEffect(() => {
         console.log(sideBarRef.current)
         sideBarRef.current.focus();
-        console.log(`sideBtn Ref is `,sideBtnRef.current)
+        console.log(`sideBtn Ref is `, sideBtnRef.current)
 
         const handleOutsideClick = (e) => {
             // `sideBarRef.current` checked to check if the sideBarRef pointed element is active or not at the time of outside click as sideBarRef points to the element if focused
-          if(!sideBtnRef.current.contains(e.target) &&  !sideBarRef.current.contains(e.target)){
-            setIsSidebarOpen(false);
-          }
+            if (!sideBtnRef.current.contains(e.target) && !sideBarRef.current.contains(e.target)) {
+                setIsSidebarOpen(false);
+            }
         };
 
-        document.addEventListener("mousedown",handleOutsideClick)
+        document.addEventListener("mousedown", handleOutsideClick)
 
-        return ()=> document.removeEventListener("mousedown",handleOutsideClick)
-        
-    },[])
+        return () => document.removeEventListener("mousedown", handleOutsideClick)
+
+    }, [])
+
+    console.log(`inCrazyGames is ${inCrazyGames}`)
 
     return (
 
@@ -126,10 +128,12 @@ export default function Sidebar({ isApp, inCrazyGames, setSettingsModal }) {
                                             </button>
                                         </Link>
                                         <button
-                                            className="flex items-center justify-center w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                                            className="flex items-center justify-center w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2  rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105"
                                             onClick={() => setSettingsModal(true)}
                                         >
-                                            <FaGear className="mr-2" /> Settings
+                                            <div onClick={() => setSettingsModal(true)} className="flex items-center">
+                                                <FaGear className="mr-2" /> Settings
+                                            </div>
                                         </button>
                                     </div>
                                 )}

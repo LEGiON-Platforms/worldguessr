@@ -82,7 +82,7 @@ export default function HomeContent({ loading, setScreen, handleMultiplayerActio
                     <div className="flex flex-col gap-3 w-full">
                         <div className="flex gap-2 w-full  justify-around">
                             <button className="text-2xl px-5 py-2  rounded-full text-nowrap bg-teal-500 text-white font-extrabold cursor-pointer
-                            hover:bg-teal-800 disabled:cursor-not-allowed"
+                            hover:bg-teal-800 disabled:cursor-not-allowed hover:scale-105"
                                 onClick={() => {
                                     console.log(`clicked the duel option`)
                                     handleMultiplayerAction("publicDuel")
@@ -91,7 +91,7 @@ export default function HomeContent({ loading, setScreen, handleMultiplayerActio
                                 disabled={!multiplayerState.connected || maintenance}
                             >Find A Duel</button>
                             <button className="text-2xl px-5 py-2  rounded-full text-nowrap bg-emerald-500
-                            hover:bg-emerald-700 text-white font-extrabold cursor-pointer disabled:cursor-not-allowed"
+                            hover:bg-emerald-700 text-white font-extrabold cursor-pointer disabled:cursor-not-allowed hover:scale-105"
                                 // to disable the button when either the user is not connected to the server or  maintainence is ongoing
                                 disabled={!multiplayerState.connected || maintenance}
                             >Custom Maps</button>
@@ -103,7 +103,7 @@ export default function HomeContent({ loading, setScreen, handleMultiplayerActio
                                 onClick={() => {
                                     setSelectDropdown(!selectDropdown)
                                 }}
-                                className="text-2xl px-8 py-2 rounded-full bg-orange-500 hover:bg-orange-700  text-white font-extrabold flex flex-col items-center gap-3 disabled:cursor-not-allowed"
+                                className="text-2xl px-8 py-2 rounded-full bg-orange-500 hover:bg-orange-700  text-white font-extrabold flex flex-col items-center gap-3 disabled:cursor-not-allowed hover:scale-105"
                                 // to disable the button when either the user is not connected to the server or  maintainence is ongoing
                                 disabled={!multiplayerState.connected || maintenance}
                             >
@@ -131,7 +131,7 @@ export default function HomeContent({ loading, setScreen, handleMultiplayerActio
                                     <div className={`flex flex-col gap-2 w-full transition-all duration-300 ease-in-out origin-top ${selectDropdown ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
                                         <div className="flex justify-center" disabled={multiplayerState.connected || maintenance} onClick={() => handleMultiplayerAction("joinPrivateGame")}
                                         >
-                                            <button className="border-x-2 border-y-2 p-2 pr-4 border-fuchsia-600 btnField text-lg flex gap-2 items-center animate-bounce disabled:cursor-not-allowed">
+                                            <button className="border-x-2 border-y-2 p-2 pr-4 border-fuchsia-600 btnField text-lg flex gap-2 items-center animate-bounce disabled:cursor-not-allowed hover:scale-105">
                                                 <lord-icon
                                                     src="https://cdn.lordicon.com/nfgmqqvs.json"
                                                     trigger="loop"
@@ -143,7 +143,7 @@ export default function HomeContent({ loading, setScreen, handleMultiplayerActio
                                             </button>
                                         </div>
                                         <div className="flex justify-center" disabled={!multiplayerState.connected || maintenance} onClick={() => handleMultiplayerAction("createPrivateGame")} >
-                                            <button className="border-x-2 border-y-2 p-2 pr-4 border-fuchsia-600 btnField text-lg flex gap-2 items-center animate-bounce  disabled:cursor-not-allowed">
+                                            <button className="border-x-2 border-y-2 p-2 pr-4 border-fuchsia-600 btnField text-lg flex gap-2 items-center animate-bounce  disabled:cursor-not-allowed hover:scale-105">
                                                 <lord-icon
                                                     src="https://cdn.lordicon.com/bhprdjgb.json"
                                                     trigger="loop"
