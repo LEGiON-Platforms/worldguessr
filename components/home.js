@@ -435,6 +435,7 @@ export default function Home() {
   const [showDiscordModal, setShowDiscordModal] = useState(false);
   const [singlePlayerRound, setSinglePlayerRound] = useState(null);
   const [partyModalShown, setPartyModalShown] = useState(false);
+
   useEffect(() => {
     if (screen === "singleplayer") {
       // start the single player game
@@ -1824,7 +1825,20 @@ export default function Home() {
       <HeadContent text={text} />
 
       {/* Checks for the online status and deals with connectivity */}
-      <Navbar maintenance={maintenance} inCrazyGames={inCrazyGames} loading={loading} onFriendsPress={() => setFriendsModal(true)} loginQueued={loginQueued} setLoginQueued={setLoginQueued} inGame={multiplayerState?.inGame || screen === "singleplayer"} openAccountModal={() => setAccountModalOpen(true)} session={session} reloadBtnPressed={reloadBtnPressed} backBtnPressed={backBtnPressed} setGameOptionsModalShown={setGameOptionsModalShown} onNavbarPress={() => onNavbarLogoPress()} gameOptions={gameOptions} screen={screen} multiplayerState={multiplayerState} shown={!multiplayerState?.gameData?.public && !leagueModal} />
+     
+      <Navbar
+          joinCodePress={() => {
+            setOnboarding(null)
+            setOnboardingCompleted(true)
+            gameStorage.setItem("onboarding", 'done')
+            setScreen("multiplayer")
+            setMultiplayerState((prev) => ({
+              ...prev,
+              enteringGameCode: true
+            }))
+          }}
+
+          maintenance={maintenance} inCrazyGames={inCrazyGames}  loading={loading} onFriendsPress={() => setFriendsModal(true)} loginQueued={loginQueued} setLoginQueued={setLoginQueued} inGame={multiplayerState?.inGame || screen === "singleplayer"} openAccountModal={() => setAccountModalOpen(true)} session={session} reloadBtnPressed={reloadBtnPressed} backBtnPressed={backBtnPressed} setGameOptionsModalShown={setGameOptionsModalShown} onNavbarPress={() => onNavbarLogoPress()} gameOptions={gameOptions} screen={screen} multiplayerState={multiplayerState} shown={!multiplayerState?.gameData?.public && !leagueModal} />
 
 
       {/* ELO/League button (A FEATURE IN-GAME*/}
@@ -1885,6 +1899,8 @@ export default function Home() {
           />
         </div>
 
+        
+
         {/* Ad BAR  */}
         <div className="videoAdParent hidden">
           <div className="videoAdPlayer">
@@ -1894,6 +1910,8 @@ export default function Home() {
             <div id="videoad"></div>
           </div>
         </div>
+
+        
 
 
         {/* SIDEBAR ON THE LEFT */}
@@ -1907,7 +1925,7 @@ export default function Home() {
               isApp={isApp}
               inCrazyGames={inCrazyGames}
               setSettingsModal={setSettingsModal}
-            />
+            />            
           )
         }
 

@@ -63,8 +63,8 @@ const Globe = () => {
   return (
     <div
       ref={globeRef}
-      style={{ width: "100%", height: "100%", zIndex: 500 }}
-      className="fixed top-0 right-0"
+      style={{ width: "100%", height: "100%"}}
+      className="fixed top-0 right-0 -z-50"
     ></div>
   );
 };

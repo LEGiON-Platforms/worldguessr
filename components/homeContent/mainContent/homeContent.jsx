@@ -7,7 +7,6 @@ export default function HomeContent({ loading, setScreen, handleMultiplayerActio
     ONLY FOR DEVELOPMENT, MAKE MULTIPLAYERSTATE.CONNECTED TRUE
     */
 
-    process.env.NEXT_PUBLIC_ENV==="development" && (multiplayerState.connected = true)
 
     const [avatarPath, setAvatarPath] = useState("")
     const inputRef = useRef();
