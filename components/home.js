@@ -1,4 +1,4 @@
-
+import Shop from "@/components/homeContent/Shop/shop"
 import HeadContent from "@/components/headContent";
 import { signOut, useSession } from "@/components/auth/auth";
 import 'react-responsive-modal/styles.css';
@@ -80,8 +80,15 @@ const initialMultiplayerState = {
 }
 
 export default function Home() {
+
+  // STATES CREATED BY INCOG
+
   const [background, setBackground] = useState("/street1.jpg")
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isShopOpen, setIsShopOpen] = useState(false);
+
+
+  // EXISTING STATES
 
   const { width, height } = useWindowDimensions();
   const statsRef = useRef();
@@ -811,7 +818,7 @@ export default function Home() {
   }, [multiplayerState?.joinOptions?.error]);
 
 
-// FUNCTION THAT HANDLES ALL THE ACTIONS THAT OCCUR AFTER CLICKING BUTTONS IN THE HOME PAGE
+  // FUNCTION THAT HANDLES ALL THE ACTIONS THAT OCCUR AFTER CLICKING BUTTONS IN THE HOME PAGE
   function handleMultiplayerAction(action, ...args) {
     // if (!ws || !multiplayerState.connected || multiplayerState.gameQueued || multiplayerState.connecting) return;
 
@@ -1840,7 +1847,9 @@ export default function Home() {
       {ChatboxMemo}
       <ToastContainer />
 
-      {/* BACKGROUND IMAGE SETUP */}
+
+
+      {/* BACKGROUND SETUP */}
       <div style={{
         top: 0,
         left: 0,
@@ -1870,8 +1879,10 @@ export default function Home() {
       {/* CONTAINS ALL THE LOGIC, UI AND COMPONENTS IN THE HOMEPAGE */}
       <main className={`home`} id="main">
         {/* ALL THE UI IN THE HOMEPAGE,ALL THE TEXT AND THE BUTTONS IN THE CENTRE */}
-        <div className={`home__content ${screen !== "home" ? "hidden" : ""} `}>
-          <HomeContent loading={loading} setScreen={setScreen} handleMultiplayerAction={handleMultiplayerAction} multiplayerState={multiplayerState} maintenance={maintenance}/>
+        <div className={`home__content ${screen !== "home" || isShopOpen ? "hidden" : ""} `} hidden={isShopOpen}>
+          <HomeContent loading={loading} setScreen={setScreen} handleMultiplayerAction={handleMultiplayerAction} multiplayerState={multiplayerState} maintenance={maintenance}
+            setMapModal={setMapModal}
+          />
         </div>
 
         {/* Ad BAR  */}
@@ -1884,6 +1895,8 @@ export default function Home() {
           </div>
         </div>
 
+
+        {/* SIDEBAR ON THE LEFT */}
         {screen === "home" &&
           !mapModal &&
           !merchModal &&
@@ -1897,6 +1910,27 @@ export default function Home() {
             />
           )
         }
+
+        {/* SHOP FOR EXPLORING AVATARS */}
+        {/*         
+          <div className="flex flex-col items-center justify-center h-fit relative top-[calc(20%)] left-[calc(89%)] ">
+          {!isShopOpen && (
+            <button
+              onClick={() => setIsShopOpen((prev) => !prev)}
+              className="px-4 py-2 font-bold bg-blue-500 text-white rounded-2xl shadow group hover:gap-2 hover:bg-blue-600 flex  items-center animate-pulse hover:animate-none">
+              <span className="text-2xl font-bold group-hover:scale-110  text-white">Shop</span>
+              <lord-icon
+                src="https://cdn.lordicon.com/lvaninzq.json"
+                trigger="loop"
+                delay="2500"
+                colors="primary:#ffffff"
+                style={{ width: "45px", height: "45px" }}>
+              </lord-icon>
+            </button>)}
+          {isShopOpen && <Shop setIsShopOpen={setIsShopOpen} isShopOpen={isShopOpen} />}
+        </div> */}
+
+
 
         <SvEmbedIframe
           nm={gameOptions?.nm}

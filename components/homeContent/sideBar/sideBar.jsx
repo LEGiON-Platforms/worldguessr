@@ -128,7 +128,7 @@ export default function Sidebar({ isApp, inCrazyGames, setSettingsModal }) {
                                             </button>
                                         </Link>
                                         <button
-                                            className="flex items-center justify-center w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2  rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                                            className="flex items-center justify-center px-3 bg-green-500 hover:bg-green-600 text-white font-semibold py-2  rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105"
                                             onClick={() => setSettingsModal(true)}
                                         >
                                             <div onClick={() => setSettingsModal(true)} className="flex items-center">

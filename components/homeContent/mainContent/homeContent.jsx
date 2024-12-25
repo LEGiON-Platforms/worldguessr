@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from "react"
 import getAvatar from "../../utils/getAvatar"
 import { translate } from "ol/transform";
 
-export default function HomeContent({ loading, setScreen, handleMultiplayerAction, maintenance, multiplayerState }) {
+export default function HomeContent({ loading, setScreen, handleMultiplayerAction, maintenance, multiplayerState, setMapModal }) {
     /*
     ONLY FOR DEVELOPMENT, MAKE MULTIPLAYERSTATE.CONNECTED TRUE
     */
-    multiplayerState.connected = true;
+
+    process.env.NEXT_PUBLIC_ENV==="development" && (multiplayerState.connected = true)
 
     const [avatarPath, setAvatarPath] = useState("")
     const inputRef = useRef();
@@ -50,7 +51,7 @@ export default function HomeContent({ loading, setScreen, handleMultiplayerActio
     return (
         <>
             <div className=" flex flex-col relative bottom-10">
-                <div className="heading text-center flex flex-col  gap-5 items-center">
+                <div className=" text-center flex flex-col  gap-5 items-center">
                     <h1 className="text-7xl font-extrabold animate-bounce ">WorldGuessr</h1>
                     <h3 className="text-xl underline font-bold">A free multiplayer geography guessing game !!</h3>
                     <img src={avatarPath} className="w-20 h-20  rounded-full bg-purple-200" />
@@ -94,6 +95,7 @@ export default function HomeContent({ loading, setScreen, handleMultiplayerActio
                             hover:bg-emerald-700 text-white font-extrabold cursor-pointer disabled:cursor-not-allowed hover:scale-105"
                                 // to disable the button when either the user is not connected to the server or  maintainence is ongoing
                                 disabled={!multiplayerState.connected || maintenance}
+                                onClick={() => setMapModal(true)}
                             >Custom Maps</button>
                         </div>
                         <div className="flex flex-col items-center gap-2">
