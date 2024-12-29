@@ -1,11 +1,12 @@
 import { Html, Head, Main, NextScript } from "next/document";
-import React, { useEffect } from "react";
+import Script from "next/script";
 
 export default function Document() {
   return (
     <Html lang="en">
-      <Head />
-      <script src="https://cdn.lordicon.com/lordicon.js"></script>
+      <Head >
+      <Script src="https://cdn.lordicon.com/lordicon.js" strategy="beforeInteractive" />
+      </Head>
       <body className="mainBody">
         <Main />
         <NextScript />
