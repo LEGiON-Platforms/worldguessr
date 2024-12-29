@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import * as THREE from "three";
 
+
 const Globe = () => {
   const globeRef = useRef();
 
@@ -20,7 +21,7 @@ const Globe = () => {
   
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(globeRef.current.clientWidth, globeRef.current.clientHeight);
-    renderer.outputEncoding = THREE.sRGBEncoding; // Enable gamma correction
+    // renderer.outputEncoding = THREE.sRGBEncoding; // Enable gamma correction
   
     globeRef.current.appendChild(renderer.domElement);
   
