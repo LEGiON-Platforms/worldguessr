@@ -1274,6 +1274,7 @@ app.ws('/wg', {
     const playerCnt = players.size;
     console.log('Players:', playerCnt, 'Games:', gameCnt, 'Memory:', memUsage);
   }, 5000)
+  
   // // Check for pong messages and disconnect inactive clients
   // setInterval(() => {
   //   const currentTime = Date.now();

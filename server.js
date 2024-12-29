@@ -73,7 +73,6 @@ function loadFolder(folder, subdir = '') {
 }
 
 let dbEnabled = true;
-
 if (!process.env.MONGODB) {
   console.log("[MISSING-ENV WARN] MONGODB env variable not set".yellow);
   dbEnabled = false;

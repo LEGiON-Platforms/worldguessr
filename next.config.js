@@ -22,10 +22,7 @@ const forProduction = {
     assetPrefix: './',
 };
 
-
-/** @type {import('next').NextConfig} */
-const nextConfig =
-{
+const forDevelopment={
     webpack: (config, { webpack }) => {
         config.devServer = {
             hot: true, // Enable HMR
@@ -38,9 +35,30 @@ const nextConfig =
     images: {
         unoptimized: true,
     },
-    output: process.env.ENV === "production" ? 'export' : undefined,
-    assetPrefix: process.env.ENV === "production" ? './' : "",
+    output: process.env.NODE_ENV === "production" ? 'export' : undefined,
+    assetPrefix: process.env.NODE_ENV === "production" ? './' : "",
 };
+
+
+/** @type {import('next').NextConfig} */
+const nextConfig ={
+    webpack: (config, { webpack }) => {
+        return config
+    },
+    sassOptions: {
+        includePaths: [path.join(__dirname, 'styles')],
+    },
+    images: {
+        unoptimized: true,
+    },
+    output: 'export',
+    assetPrefix: './',
+    eslint:{
+        ignoreDuringBuilds: true,
+    }
+};
+
+
 
 // module.exports = nextConfig;
 export default nextConfig;
