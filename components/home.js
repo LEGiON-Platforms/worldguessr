@@ -52,7 +52,7 @@ import haversineDistance from "./utils/haversineDistance";
 import StreetView from "./streetview/streetView";
 import Stats from "stats.js";
 import SvEmbedIframe from "./streetview/svHandler";
-import Globe from "./3dHome.js/globe";
+import Globe from "./3dHome/globe";
 import HomeContent from "./homeContent/mainContent/homeContent";
 import Sidebar from "./homeContent/sideBar/sideBar";
 

@@ -98,7 +98,7 @@ export default function MapPage({ }) {
     console.log('fetching map data for', slug, getHeaders());
     fetch(apiUrl+`/api/map/publicData?slug=${slug}`,{
       headers: {
-        authorization: getHeaders()?.authorization
+        authorization: getHeaders()?.Authorization
       }
     }).then(async res => {
       if (res.ok) {
