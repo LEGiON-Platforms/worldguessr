@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import StreetView from "../components/streetview/streetView";
 import Head from "next/head";
+import Script from "next/script";
 
 const SvEmbed = () => {
   const [props, setProps] = useState({
@@ -52,10 +53,10 @@ const SvEmbed = () => {
   return (
     <>
     <Head>
-    <script
+    <Script
       src="https://maps.googleapis.com/maps/api/js?v=weekly"
       defer
-    ></script>
+    ></Script>
     </Head>
     <StreetView
       nm={props.nm}

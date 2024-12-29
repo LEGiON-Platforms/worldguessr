@@ -120,17 +120,6 @@ export default function Home() {
   const [multiplayerError, setMultiplayerError] = useState(null);
   const [miniMapShown, setMiniMapShown] = useState(false)
 
-  // use if needed to switch between different static backgrounds
-  useEffect(() => {
-    // console.log(`I am inside the initial clg`);
-    // const interval = setInterval(() => {
-    //   setBackground((state) => (state === "/street1.jpg" ? "/street2.jpg" : "/street1.jpg"))
-    // }, 10000);
-
-    // return () => clearInterval(interval);
-  }, [])
-
-
   useEffect(() => {
     const { ramUsage } = options;
     if (ramUsage) {
@@ -173,18 +162,23 @@ export default function Home() {
 
   }, [options?.ramUsage])
 
+  // ALL CODE RELATED TO GOOGLE LOGINS USINIG React OAuthV2 NPM package
   let login = null;
   if (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     login = useGoogleLogin({
       onSuccess: tokenResponse => {
+        console.log(`the token response is: `,tokenResponse);
         fetch(clientConfig().apiUrl + "/api/googleAuth", {
           body: JSON.stringify({ code: tokenResponse.code }),
           method: "POST",
           headers: {
             'Content-Type': 'application/json'
           }
-        }).then((res) => res.json()).then((data) => {
+        }).then((res) => {
+          console.log(res)
+          res.json();
+        }).then((data) => {
           if (data.secret) {
 
             setSession({ token: data })
@@ -261,6 +255,8 @@ export default function Home() {
 
 
   }, [session?.token?.username, leagueModal])
+
+
   useEffect(() => {
     if (!eloData?.elo) return;
 
@@ -542,6 +538,7 @@ export default function Home() {
       setOnboardingCompleted(true)
     }
   }, [onboarding?.completed])
+
   useEffect(() => {
     try {
       const onboarding = gameStorage.getItem("onboarding");
@@ -575,74 +572,74 @@ export default function Home() {
       window.blocked = true;
       document.write(`
         <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Play WorldGuessr</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Play WorldGuessr</title>
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
 
-    body, html {
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: url('https://www.worldguessr.com/street1.jpg') no-repeat center center/cover;
-      font-family: 'Arial', sans-serif;
-    }
+          body, html {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('https://www.worldguessr.com/street1.jpg') no-repeat center center/cover;
+            font-family: 'Arial', sans-serif;
+          }
 
-    .container {
-      text-align: center;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 30px;
-      border-radius: 10px;
-    }
+          .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+          }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-    }
+          h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+          }
 
-    a {
-      text-decoration: none;
-    }
+          a {
+            text-decoration: none;
+          }
 
-    .play-button {
-      background-color: #2563eb;
-      color: white;
-      padding: 15px 30px;
-      font-size: 1.5rem;
-      border-radius: 50px;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
+          .play-button {
+            background-color: #2563eb;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          }
 
-    .play-button:hover {
-      background-color: #1d4ed8;
-      transform: scale(1.05);
-    }
+          .play-button:hover {
+            background-color: #1d4ed8;
+            transform: scale(1.05);
+          }
 
-    .play-button:active {
-      background-color: #1e40af;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Welcome to WorldGuessr!</h1>
-    <a href="https://worldguessr.com" target="_blank">
-      <button class="play-button">Open in New Tab ↗</button>
-    </a>
-  </div>
-</body>
-</html>
+          .play-button:active {
+            background-color: #1e40af;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Welcome to WorldGuessr!</h1>
+          <a href="https://worldguessr.com" target="_blank">
+            <button class="play-button">Open in New Tab ↗</button>
+          </a>
+        </div>
+      </body>
+      </html>
       `)
       sendEvent("blocked_iframe")
     }
@@ -1825,20 +1822,20 @@ export default function Home() {
       <HeadContent text={text} />
 
       {/* Checks for the online status and deals with connectivity */}
-     
-      <Navbar
-          joinCodePress={() => {
-            setOnboarding(null)
-            setOnboardingCompleted(true)
-            gameStorage.setItem("onboarding", 'done')
-            setScreen("multiplayer")
-            setMultiplayerState((prev) => ({
-              ...prev,
-              enteringGameCode: true
-            }))
-          }}
 
-          maintenance={maintenance} inCrazyGames={inCrazyGames}  loading={loading} onFriendsPress={() => setFriendsModal(true)} loginQueued={loginQueued} setLoginQueued={setLoginQueued} inGame={multiplayerState?.inGame || screen === "singleplayer"} openAccountModal={() => setAccountModalOpen(true)} session={session} reloadBtnPressed={reloadBtnPressed} backBtnPressed={backBtnPressed} setGameOptionsModalShown={setGameOptionsModalShown} onNavbarPress={() => onNavbarLogoPress()} gameOptions={gameOptions} screen={screen} multiplayerState={multiplayerState} shown={!multiplayerState?.gameData?.public && !leagueModal} />
+      <Navbar
+        joinCodePress={() => {
+          setOnboarding(null)
+          setOnboardingCompleted(true)
+          gameStorage.setItem("onboarding", 'done')
+          setScreen("multiplayer")
+          setMultiplayerState((prev) => ({
+            ...prev,
+            enteringGameCode: true
+          }))
+        }}
+
+        maintenance={maintenance} inCrazyGames={inCrazyGames} loading={loading} onFriendsPress={() => setFriendsModal(true)} loginQueued={loginQueued} setLoginQueued={setLoginQueued} inGame={multiplayerState?.inGame || screen === "singleplayer"} openAccountModal={() => setAccountModalOpen(true)} session={session} reloadBtnPressed={reloadBtnPressed} backBtnPressed={backBtnPressed} setGameOptionsModalShown={setGameOptionsModalShown} onNavbarPress={() => onNavbarLogoPress()} gameOptions={gameOptions} screen={screen} multiplayerState={multiplayerState} shown={!multiplayerState?.gameData?.public && !leagueModal} />
 
 
       {/* ELO/League button (A FEATURE IN-GAME*/}
@@ -1899,7 +1896,7 @@ export default function Home() {
           />
         </div>
 
-        
+
 
         {/* Ad BAR  */}
         <div className="videoAdParent hidden">
@@ -1911,7 +1908,7 @@ export default function Home() {
           </div>
         </div>
 
-        
+
 
 
         {/* SIDEBAR ON THE LEFT */}
@@ -1925,7 +1922,7 @@ export default function Home() {
               isApp={isApp}
               inCrazyGames={inCrazyGames}
               setSettingsModal={setSettingsModal}
-            />            
+            />
           )
         }
 

@@ -35,8 +35,8 @@ const forDevelopment={
     images: {
         unoptimized: true,
     },
-    output: process.env.ENV === "production" ? 'export' : undefined,
-    assetPrefix: process.env.ENV === "production" ? './' : "",
+    output: process.env.NODE_ENV === "production" ? 'export' : undefined,
+    assetPrefix: process.env.NODE_ENV === "production" ? './' : "",
 };
 
 
