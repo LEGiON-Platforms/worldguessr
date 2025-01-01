@@ -21,12 +21,12 @@
                             }} >{text("singleplayer")}</button>
                         {/* <span className="bigSpan">{text("playOnline")}</span> */}
                         <button className="homeBtn multiplayerOptionBtn publicGame" onClick={() => handleMultiplayerAction("publicDuel")}
-                            disabled={!multiplayerState.connected || maintenance}>{session?.token?.secret ? text("rankedDuel") : text("findDuel")}</button>
+                            disabled={!multiplayerState?.connected || maintenance}>{session?.token?.secret ? text("rankedDuel") : text("findDuel")}</button>
 
-                        {/* <span className="bigSpan" disabled={!multiplayerState.connected}>{text("playFriends")}</span> */}
+                        {/* <span className="bigSpan" disabled={!multiplayerState?.connected}>{text("playFriends")}</span> */}
                         <div className="multiplayerPrivBtns">
-                            <button className="homeBtn multiplayerOptionBtn" disabled={!multiplayerState.connected || maintenance} onClick={() => handleMultiplayerAction("createPrivateGame")}>{text("createGame")}</button>
-                            <button className="homeBtn multiplayerOptionBtn" disabled={!multiplayerState.connected || maintenance} onClick={() => handleMultiplayerAction("joinPrivateGame")}>{text("joinGame")}</button>
+                            <button className="homeBtn multiplayerOptionBtn" disabled={!multiplayerState?.connected || maintenance} onClick={() => handleMultiplayerAction("createPrivateGame")}>{text("createGame")}</button>
+                            <button className="homeBtn multiplayerOptionBtn" disabled={!multiplayerState?.connected || maintenance} onClick={() => handleMultiplayerAction("joinPrivateGame")}>{text("joinGame")}</button>
                         </div>
                     </div>
 

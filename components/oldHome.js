@@ -829,7 +829,7 @@ setShowCountryButtons(false)
 
 
   function handleMultiplayerAction(action, ...args) {
-    if (!ws || !multiplayerState.connected || multiplayerState.gameQueued || multiplayerState.connecting) return;
+    if (!ws || !multiplayerState?.connected || multiplayerState.gameQueued || multiplayerState.connecting) return;
 
     if (action === "publicDuel") {
       setScreen("multiplayer")
@@ -940,7 +940,7 @@ setShowCountryButtons(false)
     (async() => {
 
 
-    if (!ws && !multiplayerState.connecting && !multiplayerState.connected && !window?.dontReconnect) {
+    if (!ws && !multiplayerState.connecting && !multiplayerState?.connected && !window?.dontReconnect) {
 
       setMultiplayerState((prev) => ({
         ...prev,
@@ -2035,10 +2035,10 @@ setShowCountryButtons(false)
         <button className="homeBtn multiplayerOptionBtn publicGame" onClick={() => handleMultiplayerAction("publicDuel")}
           >{session?.token?.secret ? text("rankedDuel") : text("findDuel")}</button>
 
-        {/* <span className="bigSpan" disabled={!multiplayerState.connected}>{text("playFriends")}</span> */}
+        {/* <span className="bigSpan" disabled={!multiplayerState?.connected}>{text("playFriends")}</span> */}
         <div className="multiplayerPrivBtns">
-        <button className="homeBtn multiplayerOptionBtn" disabled={!multiplayerState.connected || maintenance} onClick={() => handleMultiplayerAction("createPrivateGame")}>{text("createGame")}</button>
-        <button className="homeBtn multiplayerOptionBtn" disabled={!multiplayerState.connected || maintenance} onClick={() => handleMultiplayerAction("joinPrivateGame")}>{text("joinGame")}</button>
+        <button className="homeBtn multiplayerOptionBtn" disabled={!multiplayerState?.connected || maintenance} onClick={() => handleMultiplayerAction("createPrivateGame")}>{text("createGame")}</button>
+        <button className="homeBtn multiplayerOptionBtn" disabled={!multiplayerState?.connected || maintenance} onClick={() => handleMultiplayerAction("joinPrivateGame")}>{text("joinGame")}</button>
         </div>
       </div>
 

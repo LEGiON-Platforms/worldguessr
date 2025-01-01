@@ -3,7 +3,6 @@ import Link from "next/link";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import { FaGear, FaRankingStar, FaYoutube } from "react-icons/fa6";
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import Blur from "@/components/Blur/Blur";
 
 export default function Sidebar({ isApp, inCrazyGames, setSettingsModal }) {
 

@@ -35,7 +35,7 @@ export default function MultiplayerHome({ ws, setWs, multiplayerError, multiplay
     <div className={`multiplayerHome ${!["waiting","end"].includes(multiplayerState?.gameData?.state) ? "inGame" : ""}`}>
         {/* <BannerText text={multiplayerState.error} shown={multiplayerState.error} hideCompass={true} /> */}
 
-       { multiplayerState.connected && !multiplayerState.inGame && !multiplayerState.gameQueued && multiplayerState.enteringGameCode && (
+       { multiplayerState?.connected && !multiplayerState.inGame && !multiplayerState.gameQueued && multiplayerState.enteringGameCode && (
       <div style={{ pointerEvents: 'all', alignContent: 'center', justifyContent: 'center', textAlign: 'center' }}>
         <span className="bigSpan">{text("joinGame")}</span>
 

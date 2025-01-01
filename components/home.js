@@ -813,7 +813,7 @@ export default function Home() {
 
   // FUNCTION THAT HANDLES ALL THE ACTIONS THAT OCCUR AFTER CLICKING BUTTONS IN THE HOME PAGE
   function handleMultiplayerAction(action, ...args) {
-    // if (!ws || !multiplayerState.connected || multiplayerState.gameQueued || multiplayerState.connecting) return;
+    // if (!ws || !multiplayerState?.connected || multiplayerState.gameQueued || multiplayerState.connecting) return;
 
     if (action === "publicDuel") {
       console.log(`I am inside handling `)
@@ -926,7 +926,7 @@ export default function Home() {
     (async () => {
 
 
-      if (!ws && !multiplayerState.connecting && !multiplayerState.connected && !window?.dontReconnect) {
+      if (!ws && !multiplayerState.connecting && !multiplayerState?.connected && !window?.dontReconnect) {
 
         setMultiplayerState((prev) => ({
           ...prev,
