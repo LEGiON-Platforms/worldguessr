@@ -5,7 +5,7 @@ __      _____  _ __| | __| | __ _ _   _  ___  ___ ___ _ __
  \ V  V / (_) | |  | | (_| | (_| | |_| |  __/\__ \__ \ |
   \_/\_/ \___/|_|  |_|\__,_|\__, |\__,_|\___||___/___/_|  API
                             |___/
-A game by LEGION-Platforms
+A game by IncogCyberpunk & LEGION-Platforms
 
 https://github.com/LEGiON-Platforms/worldguessr
 // */
@@ -106,7 +106,7 @@ if(!process.env.GOOGLE_CLIENT_SECRET) {
 
 
 
-
+// HERE THE PORT IS SET TO 3001 , So All api requests are to be made at 3001
 const port = process.env.API_PORT || 3001;
 
 let recentPlays = {}; // track the recent play gains of maps

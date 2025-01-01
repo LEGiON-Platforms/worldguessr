@@ -8,7 +8,7 @@ import config from "@/clientConfig";
 import { useSession } from "@/components/auth/auth";
 import Head from "next/head";
 
-export default function MapsPage({  }) {
+export default function MapsPage({ }) {
     const router = useRouter();
     const { t: text } = useTranslation("common");
     const { data: session, status } = useSession();
@@ -18,15 +18,15 @@ export default function MapsPage({  }) {
     }, []);
 
     const handleMapClick = (map) => {
-            router.push(`/map?s=${map.slug}`);
+        router.push(`/map?s=${map.slug}`);
     };
 
     return (
         <div style={styles.pageContainer}>
-          <Head>
-<link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet"/>
+            <Head>
+                <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet" />
 
-          </Head>
+            </Head>
             <div style={styles.pageContent}>
                 <MapView
                     showOptions={false}

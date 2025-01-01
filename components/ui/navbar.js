@@ -39,7 +39,6 @@ export default function Navbar({ maintenance, inCrazyGames, inGame, openAccountM
             {maintenance ? text("maintenanceMode") : text("onlineCnt", { cnt: multiplayerState.playerCount })}
           </span>
         )}
-        {console.log(`multiplayerState connected is ${multiplayerState.connected}`,)}
         {!multiplayerState?.connected && (
           <WsIcon connected={false} shown={true} />
         )}

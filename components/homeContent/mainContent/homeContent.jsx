@@ -3,9 +3,6 @@ import getAvatar from "../../utils/getAvatar"
 import { translate } from "ol/transform";
 
 export default function HomeContent({ loading, setScreen, handleMultiplayerAction, maintenance, multiplayerState, setMapModal }) {
-    /*
-    ONLY FOR DEVELOPMENT, MAKE MULTIPLAYERSTATE.CONNECTED TRUE
-    */
 
 
     const [avatarPath, setAvatarPath] = useState("")

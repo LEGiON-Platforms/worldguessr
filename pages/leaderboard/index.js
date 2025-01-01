@@ -34,7 +34,6 @@ const Leaderboard = ({ }) => {
       const queryParams = new URLSearchParams(params).toString();
       const response = await fetch(configData.apiUrl+`/api/leaderboard${queryParams ? `?${queryParams}` : ''}`);
       const data = await response.json();
-      console.log(`the obtained data is `,data)
       setLoading(false);
       setLeaderboardData(data);
       } catch (error) {
@@ -46,8 +45,6 @@ const Leaderboard = ({ }) => {
 
     fetchData();
   }, [session, pastDay, useElo]);
-
-  console.log(`I am here in the leaderboard page`)
 
   return (
     <div>
