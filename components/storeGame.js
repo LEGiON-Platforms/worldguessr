@@ -1,4 +1,4 @@
-import User from '../../../worldguessr/models/User.js';
+import User from '../models/User.js';
 
 const pendingUpdates = []; // Queue to store pending updates
 
