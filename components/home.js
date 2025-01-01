@@ -167,23 +167,18 @@ export default function Home() {
   if (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     login = useGoogleLogin({
-      onSuccess: tokenResponse => {
-        console.log(`the token response is: `,tokenResponse);
+      onSuccess:  tokenResponse => {
         fetch(clientConfig().apiUrl + "/api/googleAuth", {
           body: JSON.stringify({ code: tokenResponse.code }),
           method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Credentials":"include",
           }
-        }).then((res) => {
-          console.log(res)
-          res.json();
-        }).then((data) => {
+        }).then( (res) => res.json()).then((data) => {
           if (data.secret) {
-
             setSession({ token: data })
             window.localStorage.setItem("wg_secret", data.secret)
-
           } else {
             toast.error("Login error, contact support if this persists (2)")
           }

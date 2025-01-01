@@ -36,7 +36,6 @@ export default function Sidebar({ isApp, inCrazyGames, setSettingsModal }) {
 
     }, [])
 
-    console.log(`inCrazyGames is ${inCrazyGames}`)
 
     return (
 

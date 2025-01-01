@@ -47,11 +47,12 @@ export function signIn() {
     window.open(url, '_blank');
   }
 
+  
   if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
     toast.error("Google client ID not set");
     return;
   }
-
+  
   window.login();
 
 }

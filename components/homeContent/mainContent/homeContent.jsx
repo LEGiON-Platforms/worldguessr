@@ -51,7 +51,7 @@ export default function HomeContent({ loading, setScreen, handleMultiplayerActio
         <>
             <div className=" flex flex-col relative bottom-10">
                 <div className=" text-center flex flex-col  gap-5 items-center">
-                    <h1 className="text-7xl font-extrabold animate-bounce ">WorldGuessr</h1>
+                    <h1 className="text-7xl font-extrabold animate-bounce ">WorldGuessr </h1>
                     <h3 className="text-xl underline font-bold">A free multiplayer geography guessing game !!</h3>
                     <img src={avatarPath} className="w-20 h-20  rounded-full bg-purple-200" />
                 </div>

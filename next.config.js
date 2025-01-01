@@ -18,11 +18,11 @@ const forProduction = {
     images: {
         unoptimized: true,
     },
-    output: 'export',
-    assetPrefix: './',
+    output: process.env.NEXT_ENV === "production" ? 'export' : undefined,
+    assetPrefix: process.env.NEXT_ENV === "production" ? './' : "",
 };
 
-const forDevelopment={
+const forDevelopment = {
     webpack: (config, { webpack }) => {
         config.devServer = {
             hot: true, // Enable HMR
@@ -35,14 +35,17 @@ const forDevelopment={
     images: {
         unoptimized: true,
     },
-    output: process.env.NODE_ENV === "production" ? 'export' : undefined,
-    assetPrefix: process.env.NODE_ENV === "production" ? './' : "",
+    output: process.env.NEXT_ENV === "production" ? 'export' : undefined,
+    assetPrefix: process.env.NEXT_ENV === "production" ? './' : "",
 };
 
 
 /** @type {import('next').NextConfig} */
-const nextConfig ={
+const nextConfig = {
     webpack: (config, { webpack }) => {
+        config.devServer = {
+            hot: true, // Enable HMR
+        };
         return config
     },
     sassOptions: {
@@ -51,9 +54,9 @@ const nextConfig ={
     images: {
         unoptimized: true,
     },
-    output: 'export',
-    assetPrefix: './',
-    eslint:{
+    output: process.env.NEXT_ENV === "production" ? 'export' : undefined,
+    assetPrefix: process.env.NEXT_ENV === "production" ? './' : "",
+    eslint: {
         ignoreDuringBuilds: true,
     }
 };
