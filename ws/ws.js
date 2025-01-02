@@ -29,7 +29,8 @@ fs.readFileSync('public/Crazygames_profanity_filter.txt', 'utf8').split('\n').fo
 });
 
 // init state vars
-const dev = process.env.NODE_ENV !== 'production'
+const dev = process.env.NODE_PUBLIC_ENV !== 'production'
+console.log(`The environment in ws.js for node env is `, process.env.NODE_PUBLIC_ENV)
 const port = process.env.WS_PORT || 3002;
 
 const playersInQueue = new Map();
@@ -48,7 +49,7 @@ const generateMainLocations = async () => {
   // fetch cron job localhost:3003/allCountries.json
   fetch('http://localhost:3003/allCountries.json').then(async (res) => {
     const data = await res.json();
-    allLocations = data.locations??[];
+    allLocations = data.locations ?? [];
   }).catch((e) => {
     console.error('Failed to load locations', e, currentDate());
   });
@@ -96,11 +97,11 @@ function log(...args) {
   console.log(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }), ...args);
 
   // if(!dev) {
-    // if(process.env.DISCORD_WEBHOOK_WS) {
-    //   const hook = new Webhook(process.env.DISCORD_WEBHOOK_WS);
-    //   hook.setUsername("Logs"+(dev ? ' - Dev' : ''));
-    //   hook.send(args.join(' '));
-    // }
+  // if(process.env.DISCORD_WEBHOOK_WS) {
+  //   const hook = new Webhook(process.env.DISCORD_WEBHOOK_WS);
+  //   hook.setUsername("Logs"+(dev ? ' - Dev' : ''));
+  //   hook.send(args.join(' '));
+  // }
   // }
 }
 
@@ -144,7 +145,7 @@ function log(...args) {
 
 
 blockedAt((time, stack) => {
-  if(time > 1000) console.log(`Blocked for ${time}ms, operation started here:`, JSON.stringify(stack, null, 2), currentDate());
+  if (time > 1000) console.log(`Blocked for ${time}ms, operation started here:`, JSON.stringify(stack, null, 2), currentDate());
 })
 function stop(reason) {
   console.error('Stopping server', reason, currentDate());
@@ -183,20 +184,20 @@ app.listen('0.0.0.0', port, (ws) => {
 
 app.get('/', (res, req) => {
 
-      // count all the headers
-      let headerKb = 0;
-      req.forEach((key, value) => {
+  // count all the headers
+  let headerKb = 0;
+  req.forEach((key, value) => {
 
-        headerKb += key.length + value.length;
+    headerKb += key.length + value.length;
 
-      });
-      headerKb = headerKb / 1024;
+  });
+  headerKb = headerKb / 1024;
 
 
   setCorsHeaders(res);
   res.writeHeader('Content-Type', 'text/html');
   res.writeStatus('200 OK');
-  res.end("WorldGuessr - Powered by uWebSockets.js<br>Headers: "+headerKb.toFixed(2)+'kb');
+  res.end("WorldGuessr - Powered by uWebSockets.js<br>Headers: " + headerKb.toFixed(2) + 'kb');
 });
 
 // maintenance mode
@@ -264,7 +265,7 @@ if (process.env.MAINTENANCE_SECRET) {
 
     setCorsHeaders(res);
     res.writeHeader('Content-Type', 'text/htmk');
-    res.end('kick count: ' + cnt+'<br>banned ip: '+ip+'<br> all ips: '+[...bannedIps].join('<br>'));
+    res.end('kick count: ' + cnt + '<br>banned ip: ' + ip + '<br> all ips: ' + [...bannedIps].join('<br>'));
     console.log('Banned ip', ip, 'kicked', cnt, currentDate());
   });
   app.get(`/unbanIp/${maintenanceSecret}/:ip`, (res, req) => {
@@ -300,12 +301,12 @@ app.ws('/wg', {
   idleTimeout: 60,
   /* Handlers */
   upgrade: (res, req, context) => {
-    let ip =  req.getHeader('x-forwarded-for') || req.getHeader('cf-connecting-ip') || 'unknown';
-    if(ip.includes(',')) {
+    let ip = req.getHeader('x-forwarded-for') || req.getHeader('cf-connecting-ip') || 'unknown';
+    if (ip.includes(',')) {
       ip = ip.split(',')[0];
     }
-    if([...bannedIps].some((bannedIp) => ip.includes(bannedIp))
-       || ipConnectionCount.get(ip) && ipConnectionCount.get(ip) > 100) {
+    if ([...bannedIps].some((bannedIp) => ip.includes(bannedIp))
+      || ipConnectionCount.get(ip) && ipConnectionCount.get(ip) > 100) {
       console.log('Banned ip tried to connect', ip, currentDate());
       res.writeStatus('403 Forbidden');
       res.end();
@@ -322,7 +323,7 @@ app.ws('/wg', {
     const ip = ws.ip;
     const id = ws.id;
     const player = new Player(ws, id, ip);
-    if(ip !== 'unknown') ipConnectionCount.set(ip, (ipConnectionCount.get(ip) || 0) + 1);
+    if (ip !== 'unknown') ipConnectionCount.set(ip, (ipConnectionCount.get(ip) || 0) + 1);
 
 
     player.send({
@@ -376,7 +377,7 @@ app.ws('/wg', {
       }
 
       if ((json.type === 'publicDuel') && !player.gameId) {
-        if(player.banned) {
+        if (player.banned) {
           player.send({
             type: 'toast',
             key: 'unableToJoinDuel',
@@ -388,7 +389,7 @@ app.ws('/wg', {
         // get range of league
         player.inQueue = true;
 
-        if(!player.league) {
+        if (!player.league) {
 
           const queueDetails = {
             guest: true,
@@ -400,46 +401,46 @@ app.ws('/wg', {
           const range = getLeagueRange(player.league);
 
 
-        const queueDetails = {
-          min: range[0],
-          max: range[1],
-          elo: player.elo,
-          guest: false,
-          queueTime: Date.now()
+          const queueDetails = {
+            min: range[0],
+            max: range[1],
+            elo: player.elo,
+            guest: false,
+            queueTime: Date.now()
+          }
+          playersInQueue.set(player.id, queueDetails);
+
+          // send the range to the player
+          player.send({
+            type: 'publicDuelRange',
+            range
+          });
         }
-        playersInQueue.set(player.id, queueDetails);
+        if (player.ip !== 'unknown' && player.ip.includes('.')) {
 
-        // send the range to the player
-        player.send({
-          type: 'publicDuelRange',
-          range
-        });
-      }
-        if(player.ip !== 'unknown' && player.ip.includes('.')) {
+          const ipOctets = player.ip.split('.').slice(0, 3).join('.');
 
-        const ipOctets = player.ip.split('.').slice(0, 3).join('.');
+          if (!ipDuelRequestsLast10.has(ipOctets)) {
+            ipDuelRequestsLast10.set(ipOctets, 1);
+          } else {
+            log('Duel requests from ip', ipOctets, ipDuelRequestsLast10.get(ipOctets));
 
-        if (!ipDuelRequestsLast10.has(ipOctets)) {
-          ipDuelRequestsLast10.set(ipOctets, 1);
-        } else {
-        log('Duel requests from ip', ipOctets, ipDuelRequestsLast10.get(ipOctets));
+            ipDuelRequestsLast10.set(ipOctets, ipDuelRequestsLast10.get(ipOctets) + 1);
+          }
 
-          ipDuelRequestsLast10.set(ipOctets, ipDuelRequestsLast10.get(ipOctets) + 1);
-        }
+          if (ipDuelRequestsLast10.get(ipOctets) > 50) {
+            log('Banned IP due to spam', ipOctets);
+            bannedIps.add(ipOctets);
+            ws.close();
 
-        if (ipDuelRequestsLast10.get(ipOctets) > 50) {
-          log('Banned IP due to spam', ipOctets);
-          bannedIps.add(ipOctets);
-          ws.close();
-
-          for(const player of players.values()) {
-            if(player.ip.includes(ipOctets)) {
-              player.ws.close();
+            for (const player of players.values()) {
+              if (player.ip.includes(ipOctets)) {
+                player.ws.close();
+              }
             }
           }
+        } else {
         }
-      } else {
-      }
       }
 
 
@@ -663,19 +664,19 @@ app.ws('/wg', {
         game.addPlayer(player, true);
       }
 
-      if(json.type === "resetGame" && player.gameId && games.has(player.gameId)) {
+      if (json.type === "resetGame" && player.gameId && games.has(player.gameId)) {
         const game = games.get(player.gameId);
         // make sure player is host
-        if(game.players[player.id].host) {
+        if (game.players[player.id].host) {
           game.resetGame(allLocations);
         }
       }
 
 
-      if(json.type === "setPrivateGameOptions" && player.gameId && games.has(player.gameId)) {
+      if (json.type === "setPrivateGameOptions" && player.gameId && games.has(player.gameId)) {
         const game = games.get(player.gameId);
         // make sure player is host
-        if(game.players[player.id].host) {
+        if (game.players[player.id].host) {
           let { rounds, timePerRound, location, nm, npz, showRoadName, displayLocation } = json;
           rounds = Number(rounds);
 
@@ -688,7 +689,7 @@ app.ws('/wg', {
           if (typeof displayLocation !== 'string') {
             displayLocation = null;
           }
-          if(displayLocation) {
+          if (displayLocation) {
             // trim to 30 characters
             displayLocation = displayLocation.substring(0, 30);
 
@@ -698,9 +699,9 @@ app.ws('/wg', {
             return;
           }
 
-          if(!nm) nm = false;
-          if(!npz) npz = false;
-          if(!showRoadName) showRoadName = false;
+          if (!nm) nm = false;
+          if (!npz) npz = false;
+          if (!showRoadName) showRoadName = false;
 
           game.timePerRound = timePerRound * 1000;
           game.nm = !!nm;
@@ -966,7 +967,7 @@ app.ws('/wg', {
   },
   close: (ws, code, message) => {
     ipConnectionCount.set(ws.ip, ipConnectionCount.get(ws.ip) - 1);
-    if(ipConnectionCount.get(ws.ip) < 1) {
+    if (ipConnectionCount.get(ws.ip) < 1) {
       ipConnectionCount.delete(ws.ip);
     }
 
@@ -988,300 +989,300 @@ app.ws('/wg', {
 });
 
 
-  // update player count
-  setInterval(() => {
+// update player count
+setInterval(() => {
 
-    for (const player of players.values()) {
-      if (player.verified && !player.gameId) {
-        player.send({
-          type: 'cnt',
-          c: players.size
-        });
-      }
+  for (const player of players.values()) {
+    if (player.verified && !player.gameId) {
       player.send({
-        type: 't',
-        t: Date.now()
+        type: 'cnt',
+        c: players.size
       });
     }
-
-    if(maintenanceMode) {
-      // log count of players in active games
-      let playerCnt = 0;
-      let unstartedGames = 0;
-      for(const game of games.values()) {
-        if(game.state === 'waiting') {
-          unstartedGames++;
-        } else {
-          playerCnt += Object.keys(game.players).length;
-        }
-      }
-      console.log('Players in active games', playerCnt);
-      console.log('Unstarted games', unstartedGames);
-
-    }
-  }, 5000);
-
-  function findDuelPairs(duelQueue) {
-    const pairs = [];
-    const matchedPlayers = new Set();
-
-    // Convert Map to an array for efficient iteration
-    const entries = Array.from(duelQueue.entries());
-
-    // Loop through each player in the queue
-    for (let i = 0; i < entries.length; i++) {
-      const [id1, { min, max, elo, guest }] = entries[i];
-
-      // Skip this player if already matched
-      if (matchedPlayers.has(id1)) continue;
-
-      // Check if player1 is a guest
-      if (guest) {
-        // Look for another guest to pair with
-        for (let j = i + 1; j < entries.length; j++) {
-          const [id2, { min: min2, max: max2, elo: elo2, guest: guest2 }] = entries[j];
-
-          if (guest2 && !matchedPlayers.has(id2)) {
-            pairs.push([id1, id2]);
-            matchedPlayers.add(id1);
-            matchedPlayers.add(id2);
-            break;
-          }
-        }
-      } else {
-        // Find a suitable ELO-based pair for non-guest player1
-        for (let j = i + 1; j < entries.length; j++) {
-          const [id2, { min: min2, max: max2, elo: elo2, guest: guest2 }] = entries[j];
-
-          // Skip if already matched or if player2 is a guest
-          if (matchedPlayers.has(id2) || guest2) continue;
-
-          // Check if each player falls within the other's acceptable ELO range
-          if (elo >= min2 && elo <= max2 && elo2 >= min && elo2 <= max) {
-            pairs.push([id1, id2]);
-            matchedPlayers.add(id1);
-            matchedPlayers.add(id2);
-            break;
-          }
-        }
-      }
-    }
-
-    return pairs;
+    player.send({
+      type: 't',
+      t: Date.now()
+    });
   }
 
-
-
-  // queue handler
-  setInterval(() => {
-
-
-    // const minRoundsRemaining = 3;
+  if (maintenanceMode) {
+    // log count of players in active games
+    let playerCnt = 0;
+    let unstartedGames = 0;
     for (const game of games.values()) {
+      if (game.state === 'waiting') {
+        unstartedGames++;
+      } else {
+        playerCnt += Object.keys(game.players).length;
+      }
+    }
+    console.log('Players in active games', playerCnt);
+    console.log('Unstarted games', unstartedGames);
 
-      const playerCnt = Object.keys(game.players).length;
-      // start games that have at least 2 players
-      if (game.state === 'waiting' && playerCnt > 1 && game.public && game.rounds === game.locations.length) {
-        game.start();
-      } else if (game.state === 'getready' && Date.now() > game.nextEvtTime) {
-        if(game.curRound > game.rounds || game.readyToEnd) {
-          game.end();
-          // game over
+  }
+}, 5000);
 
-        } else {
+function findDuelPairs(duelQueue) {
+  const pairs = [];
+  const matchedPlayers = new Set();
+
+  // Convert Map to an array for efficient iteration
+  const entries = Array.from(duelQueue.entries());
+
+  // Loop through each player in the queue
+  for (let i = 0; i < entries.length; i++) {
+    const [id1, { min, max, elo, guest }] = entries[i];
+
+    // Skip this player if already matched
+    if (matchedPlayers.has(id1)) continue;
+
+    // Check if player1 is a guest
+    if (guest) {
+      // Look for another guest to pair with
+      for (let j = i + 1; j < entries.length; j++) {
+        const [id2, { min: min2, max: max2, elo: elo2, guest: guest2 }] = entries[j];
+
+        if (guest2 && !matchedPlayers.has(id2)) {
+          pairs.push([id1, id2]);
+          matchedPlayers.add(id1);
+          matchedPlayers.add(id2);
+          break;
+        }
+      }
+    } else {
+      // Find a suitable ELO-based pair for non-guest player1
+      for (let j = i + 1; j < entries.length; j++) {
+        const [id2, { min: min2, max: max2, elo: elo2, guest: guest2 }] = entries[j];
+
+        // Skip if already matched or if player2 is a guest
+        if (matchedPlayers.has(id2) || guest2) continue;
+
+        // Check if each player falls within the other's acceptable ELO range
+        if (elo >= min2 && elo <= max2 && elo2 >= min && elo2 <= max) {
+          pairs.push([id1, id2]);
+          matchedPlayers.add(id1);
+          matchedPlayers.add(id2);
+          break;
+        }
+      }
+    }
+  }
+
+  return pairs;
+}
+
+
+
+// queue handler
+setInterval(() => {
+
+
+  // const minRoundsRemaining = 3;
+  for (const game of games.values()) {
+
+    const playerCnt = Object.keys(game.players).length;
+    // start games that have at least 2 players
+    if (game.state === 'waiting' && playerCnt > 1 && game.public && game.rounds === game.locations.length) {
+      game.start();
+    } else if (game.state === 'getready' && Date.now() > game.nextEvtTime) {
+      if (game.curRound > game.rounds || game.readyToEnd) {
+        game.end();
+        // game over
+
+      } else {
         game.state = 'guess';
         game.nextEvtTime = Date.now() + game.timePerRound;
         game.clearGuesses();
 
         game.sendStateUpdate();
-        }
-
-      } else if (game.state === 'guess' && Date.now() > game.nextEvtTime) {
-        game.givePoints();
-        if(game.curRound <= game.rounds) {
-          game.curRound++;
-          game.state = 'getready';
-          game.nextEvtTime = Date.now() + game.waitBetweenRounds - (game.curRound > game.rounds ? 5000: 0);
-          game.sendStateUpdate();
-
-
-        } else {
-          // game over
-          game.end()
-        }
       }
 
-      if(game.state === 'end' && Date.now() > game.nextEvtTime) {
-        // remove game if public
-        if(game.public) {
-        game.shutdown()
-        } else {
-          game.resetGame(allLocations);
-        }
+    } else if (game.state === 'guess' && Date.now() > game.nextEvtTime) {
+      game.givePoints();
+      if (game.curRound <= game.rounds) {
+        game.curRound++;
+        game.state = 'getready';
+        game.nextEvtTime = Date.now() + game.waitBetweenRounds - (game.curRound > game.rounds ? 5000 : 0);
+        game.sendStateUpdate();
+
+
+      } else {
+        // game over
+        game.end()
       }
-
-
-      // // find games that can be joined
-      // if (playersInQueue.size < 1) {
-      //   continue;
-      // }
-      // if (!game.public) {
-      //   continue;
-      // }
-      // if (game.rounds - game.curRound < minRoundsRemaining) {
-      //   continue;
-      // }
-      // if (playerCnt >= game.maxPlayers) {
-      //   continue;
-      // }
-
-
-      // const multiplayerMax = Math.min(10, game.maxPlayers)
-      // let playersCanJoin = multiplayerMax - playerCnt;
-      // for (const playerId of playersInQueue) {
-      //   const player = players.get(playerId);
-      //   if(!player) {
-      //     playersInQueue.delete(playerId);
-      //     continue;
-      //   }
-      //   if (player.gameId) {
-      //     continue;
-      //   }
-      //   if (playersCanJoin < 1) {
-      //     break;
-      //   }
-      //   game.addPlayer(player);
-      //   playersInQueue.delete(playerId);
-      //   playersCanJoin--;
-      // }
-
     }
 
-    // if (playersInQueue.size > 1) {
-    //   // create a new public game
-    //   const gameId = uuidv4();
-    //   const game = new Game(gameId, true, undefined, undefined, allLocations);
-    //   games.set(gameId, game);
+    if (game.state === 'end' && Date.now() > game.nextEvtTime) {
+      // remove game if public
+      if (game.public) {
+        game.shutdown()
+      } else {
+        game.resetGame(allLocations);
+      }
+    }
 
-    //   let playersCanJoin = game.maxPlayers;
-    //   for (const playerId of playersInQueue) {
-    //     const player = players.get(playerId);
-    //     if (player.gameId) {
-    //       continue;
-    //     }
-    //     if (playersCanJoin < 1) {
-    //       break;
-    //     }
-    //     game.addPlayer(player);
-    //     playersInQueue.delete(playerId);
-    //     playersCanJoin--;
-    //   }
+
+    // // find games that can be joined
+    // if (playersInQueue.size < 1) {
+    //   continue;
+    // }
+    // if (!game.public) {
+    //   continue;
+    // }
+    // if (game.rounds - game.curRound < minRoundsRemaining) {
+    //   continue;
+    // }
+    // if (playerCnt >= game.maxPlayers) {
+    //   continue;
     // }
 
-    if (playersInQueue.size >= 1) {
-      const pairs = findDuelPairs(playersInQueue);
-      for(const pair of pairs) {
-        const [id1, id2] = pair;
-        const p1 = players.get(id1);
-        const p2 = players.get(id2);
 
-        const gameId = uuidv4();
-        const game = new Game(gameId, true, undefined, undefined, allLocations);
-        games.set(gameId, game);
+    // const multiplayerMax = Math.min(10, game.maxPlayers)
+    // let playersCanJoin = multiplayerMax - playerCnt;
+    // for (const playerId of playersInQueue) {
+    //   const player = players.get(playerId);
+    //   if(!player) {
+    //     playersInQueue.delete(playerId);
+    //     continue;
+    //   }
+    //   if (player.gameId) {
+    //     continue;
+    //   }
+    //   if (playersCanJoin < 1) {
+    //     break;
+    //   }
+    //   game.addPlayer(player);
+    //   playersInQueue.delete(playerId);
+    //   playersCanJoin--;
+    // }
 
-        game.addPlayer(p1, undefined, "p1");
-        game.addPlayer(p2, undefined, "p2");
-        playersInQueue.delete(id1);
-        playersInQueue.delete(id2);
-
-        // check if both have elo
-        if(p1.elo && p2.elo) {
-          // calculate elo change if p1 wins,loses,draws
-          // calculate elo change if p2 wins,loses,draws
-
-          const eloP1Win = calculateOutcomes(p1.elo, p2.elo, 1);
-          const eloDraw = calculateOutcomes(p1.elo, p2.elo, 0.5);
-          const eloP2Win = calculateOutcomes(p1.elo, p2.elo, 0);
-
-          game.eloChanges = {
-            [p1.id]: eloP1Win,
-            [p2.id]: eloP2Win,
-            draw: eloDraw
-          }
-
-
-          game.accountIds = {
-            p1: p1.accountId,
-            p2: p2.accountId
-          }
-
-
-        }
-
-        game.pIds = {
-          p1: p1.id,
-          p2: p2.id
-        }
-
-        // start the game
-        game.start();
-
-      }
-
-      // remaining players in queue check if wait was longer than 10 seconds, in that case set their elo range to infinity
-      for(const playerId of playersInQueue) {
-        const player = players.get(playerId[0]);
-        const queueData = playerId[1];
-        if(!queueData.guest && Date.now() - queueData.queueTime > 10000) {
-          playersInQueue.set(playerId[0], { ...queueData, min: 0, max: 10000, queueTime: Date.now() });
-
-          player.send({
-            type: 'publicDuelRange',
-            range: [0, 10000]
-          });
-        }
-      }
-    }
-  }, 500);
-
-
-
-
-  if(!dev && dbEnabled) {
-    setInterval(() => {
-
-      const memUsage = process.memoryUsage().heapUsed;
-      const gameCnt = games.size;
-      const playerCnt = players.size;
-
-      // store in mongodb
-      // memsave
-      const mem = new Memsave({
-        players: playerCnt,
-        memusage: memUsage,
-        games: gameCnt
-      });
-      mem.save().then(() => [
-      ])
-    }, 10000);
   }
 
+  // if (playersInQueue.size > 1) {
+  //   // create a new public game
+  //   const gameId = uuidv4();
+  //   const game = new Game(gameId, true, undefined, undefined, allLocations);
+  //   games.set(gameId, game);
 
+  //   let playersCanJoin = game.maxPlayers;
+  //   for (const playerId of playersInQueue) {
+  //     const player = players.get(playerId);
+  //     if (player.gameId) {
+  //       continue;
+  //     }
+  //     if (playersCanJoin < 1) {
+  //       break;
+  //     }
+  //     game.addPlayer(player);
+  //     playersInQueue.delete(playerId);
+  //     playersCanJoin--;
+  //   }
+  // }
+
+  if (playersInQueue.size >= 1) {
+    const pairs = findDuelPairs(playersInQueue);
+    for (const pair of pairs) {
+      const [id1, id2] = pair;
+      const p1 = players.get(id1);
+      const p2 = players.get(id2);
+
+      const gameId = uuidv4();
+      const game = new Game(gameId, true, undefined, undefined, allLocations);
+      games.set(gameId, game);
+
+      game.addPlayer(p1, undefined, "p1");
+      game.addPlayer(p2, undefined, "p2");
+      playersInQueue.delete(id1);
+      playersInQueue.delete(id2);
+
+      // check if both have elo
+      if (p1.elo && p2.elo) {
+        // calculate elo change if p1 wins,loses,draws
+        // calculate elo change if p2 wins,loses,draws
+
+        const eloP1Win = calculateOutcomes(p1.elo, p2.elo, 1);
+        const eloDraw = calculateOutcomes(p1.elo, p2.elo, 0.5);
+        const eloP2Win = calculateOutcomes(p1.elo, p2.elo, 0);
+
+        game.eloChanges = {
+          [p1.id]: eloP1Win,
+          [p2.id]: eloP2Win,
+          draw: eloDraw
+        }
+
+
+        game.accountIds = {
+          p1: p1.accountId,
+          p2: p2.accountId
+        }
+
+
+      }
+
+      game.pIds = {
+        p1: p1.id,
+        p2: p2.id
+      }
+
+      // start the game
+      game.start();
+
+    }
+
+    // remaining players in queue check if wait was longer than 10 seconds, in that case set their elo range to infinity
+    for (const playerId of playersInQueue) {
+      const player = players.get(playerId[0]);
+      const queueData = playerId[1];
+      if (!queueData.guest && Date.now() - queueData.queueTime > 10000) {
+        playersInQueue.set(playerId[0], { ...queueData, min: 0, max: 10000, queueTime: Date.now() });
+
+        player.send({
+          type: 'publicDuelRange',
+          range: [0, 10000]
+        });
+      }
+    }
+  }
+}, 500);
+
+
+
+
+if (!dev && dbEnabled) {
   setInterval(() => {
-    // log player count, game count, memory usage
+
     const memUsage = process.memoryUsage().heapUsed;
     const gameCnt = games.size;
     const playerCnt = players.size;
-    console.log('Players:', playerCnt, 'Games:', gameCnt, 'Memory:', memUsage);
-  }, 5000)
-  
-  // // Check for pong messages and disconnect inactive clients
-  // setInterval(() => {
-  //   const currentTime = Date.now();
-  //   players.forEach((player) => {
-  //     if (currentTime - player.lastPong > 60000) { // 60 seconds timeout
-  //       console.log(`Disconnecting inactive player ${player.id}`);
-  //       player.ws.close(); // Disconnect the player
-  //     }
-  //   });
-  // }, 10000); // Check every 10 seconds
+
+    // store in mongodb
+    // memsave
+    const mem = new Memsave({
+      players: playerCnt,
+      memusage: memUsage,
+      games: gameCnt
+    });
+    mem.save().then(() => [
+    ])
+  }, 10000);
+}
+
+
+setInterval(() => {
+  // log player count, game count, memory usage
+  const memUsage = process.memoryUsage().heapUsed;
+  const gameCnt = games.size;
+  const playerCnt = players.size;
+  console.log('Players:', playerCnt, 'Games:', gameCnt, 'Memory:', memUsage);
+}, 5000)
+
+// // Check for pong messages and disconnect inactive clients
+// setInterval(() => {
+//   const currentTime = Date.now();
+//   players.forEach((player) => {
+//     if (currentTime - player.lastPong > 60000) { // 60 seconds timeout
+//       console.log(`Disconnecting inactive player ${player.id}`);
+//       player.ws.close(); // Disconnect the player
+//     }
+//   });
+// }, 10000); // Check every 10 seconds

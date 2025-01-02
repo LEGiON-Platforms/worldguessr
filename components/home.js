@@ -162,12 +162,15 @@ export default function Home() {
 
   }, [options?.ramUsage])
 
+
+
   // ALL CODE RELATED TO GOOGLE LOGINS USINIG React OAuthV2 NPM package
   let login = null;
   if (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     login = useGoogleLogin({
       onSuccess:  tokenResponse => {
+        console.log(`The apiUrl for login in ${process.env} is `,clientConfig().apiUrl + "/api/googleAuth")
         fetch(clientConfig().apiUrl + "/api/googleAuth", {
           body: JSON.stringify({ code: tokenResponse.code }),
           method: "POST",
@@ -176,6 +179,7 @@ export default function Home() {
             "Credentials":"include",
           }
         }).then( (res) => res.json()).then((data) => {
+          console.log(`Data received from googleAuth api is `,data)
           if (data.secret) {
             setSession({ token: data })
             window.localStorage.setItem("wg_secret", data.secret)
@@ -934,6 +938,7 @@ export default function Home() {
           shouldConnect: false
         }))
         const ws = await initWebsocket(clientConfig().websocketUrl, null, 5000, 20)
+        console.log(`The websocket url is `,clientConfig().websocketUrl)
         if (ws && ws.readyState === 1) {
           setWs(ws)
           setMultiplayerState((prev) => ({

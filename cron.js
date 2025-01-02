@@ -146,6 +146,6 @@ app.get('/', (req, res) => {
   res.status(200).send('WorldGuessr Utils');
 });
 
-app.listen(3003, () => {
+app.listen(process.env.CRON_PORT ?? 3003, () => {
   console.log('WorldGuessr Utils listening on port 3003');
 });
