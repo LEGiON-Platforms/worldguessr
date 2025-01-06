@@ -170,7 +170,7 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     login = useGoogleLogin({
       onSuccess:  tokenResponse => {
-        console.log(`The apiUrl for login in ${process.env} is `,clientConfig().apiUrl + "/api/googleAuth")
+        console.log(`The apiUrl for login in ${process.env.NODE_PUBLIC_ENV} is `,clientConfig().apiUrl + "/api/googleAuth")
         fetch(clientConfig().apiUrl + "/api/googleAuth", {
           body: JSON.stringify({ code: tokenResponse.code }),
           method: "POST",

@@ -25,6 +25,7 @@ export default function initWebsocket(url, existingWebsocket, timeoutMs, numberO
           if (existingWebsocket) {
               existingWebsocket.close();
           }
+          console.log(`the address with type ${typeof(url)} for creating ws received is `,url)
           var websocket = new WebSocket(url);
           websocket.onopen = function () {
               if(hasReturned) {
