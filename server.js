@@ -169,7 +169,7 @@ setTimeout(() => {
 }, 20000);
 
 app.get('/', (req, res) => {
-  res.status(200).send('WorldGuessr API - by Gautam');
+  res.status(200).send('WorldGuessr API - by IncogCyberpunk');
 });
 
 loadFolder(apiFolder);
