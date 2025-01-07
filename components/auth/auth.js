@@ -78,9 +78,7 @@ export function useSession() {
   if (session === false && !window.fetchingSession && window.cConfig?.apiUrl) {
     let secret = null;
     try {
-
       secret = window.localStorage.getItem("wg_secret");
-
     } catch (e) {
       console.error(e);
     }
@@ -88,6 +86,7 @@ export function useSession() {
 
       window.fetchingSession = true;
 
+      // logging in automatically if there's a secret in the localstorage meaning the user has already logged in previously
       fetch(window.cConfig?.apiUrl + "/api/googleAuth", {
         method: "POST",
         headers: {
@@ -97,6 +96,7 @@ export function useSession() {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(`The data received when tried for auto login is `,data);
           window.fetchingSession = false;
           if (data.error) {
             console.error(data.error);
