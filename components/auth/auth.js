@@ -1,5 +1,6 @@
 import { inIframe } from "../utils/inIframe";
 import { toast } from "react-toastify";
+import urlConfig from "../../clientConfig.js"
 
 // secret: userDb.secret, username: userDb.username, email: userDb.email, staff: userDb.staff, canMakeClues: userDb.canMakeClues, supporter: userDb.supporter
 let session = false;
@@ -87,7 +88,7 @@ export function useSession() {
       window.fetchingSession = true;
 
       // logging in automatically if there's a secret in the localstorage meaning the user has already logged in previously
-      fetch(window.cConfig?.apiUrl + "/api/googleAuth", {
+      fetch(urlConfig().apiUrl + "/api/googleAuth", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
