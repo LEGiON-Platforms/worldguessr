@@ -1,6 +1,5 @@
-import Map from "../../models/Map.js";
-import User from "../../models/User.js";
-
+import Map from '../../../models/Map.js';
+import User from '../../../models/User.js';
 export default async function handler(req, res) {
   // only allow POST
   if (req.method !== 'POST') {

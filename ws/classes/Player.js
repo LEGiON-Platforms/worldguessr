@@ -5,7 +5,7 @@ import moment from "moment";
 import { players } from "../../serverUtils/states.js";
 import User from "../../models/User.js";
 import { getLeague } from "../../components/utils/leagues.js";
-import { setElo } from "../../api/eloRank.js";
+import { setElo } from "../../pages/api/eloRank.js";
 export default class Player {
   constructor(ws, id, ip) {
     this.id = id;

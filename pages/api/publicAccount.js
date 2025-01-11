@@ -1,4 +1,4 @@
-import User from '../models/User.js';
+import User from '../../models/User.js';
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 
   try {
     // Find user by the provided token
-    const user = id ? await User.findById(id).cache(120) : await User.findOne({ secret }).cache(120);
+    const user = id ? await User.findById(id) : await User.findOne({ secret });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

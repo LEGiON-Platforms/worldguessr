@@ -123,10 +123,10 @@ export default function HomeContent({ loading, setScreen, handleMultiplayerActio
                             </button>
                             {/* Dropdown Options */}
                             {/* */}
-                            <div ref={optionsRef} className="fixed bottom-32 transition-all duration-300 ease-in-out">
+                            <div ref={optionsRef} className="fixed bottom-48 ">
                                 {selectDropdown && (
                                     // Buttons wrapper
-                                    <div className={`flex flex-col gap-2 w-full transition-all duration-300 ease-in-out origin-top ${selectDropdown ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+                                    <div className={`flex flex-col gap-1 w-full transition-all duration-300 ease-in-out origin-top ${selectDropdown ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
                                         <div className="flex justify-center" disabled={multiplayerState?.connected || maintenance} onClick={() => handleMultiplayerAction("joinPrivateGame")}
                                         >
                                             <button className="border-x-2 border-y-2 p-2 pr-4 border-fuchsia-600 btnField text-lg flex gap-2 items-center animate-bounce disabled:cursor-not-allowed hover:scale-105">

@@ -19,6 +19,9 @@ import blockedAt from 'blocked-at';
 import { getLeagueRange } from '../components/utils/leagues.js';
 import calculateOutcomes from '../components/utils/eloSystem.js';
 
+import urlConfig from "../clientConfig.js"
+
+
 config();
 // Load the profanity filter
 const filter = new Filter();
@@ -47,7 +50,8 @@ function currentDate() {
 let allLocations = [];
 const generateMainLocations = async () => {
   // fetch cron job localhost:3003/allCountries.json
-  fetch('http://localhost:3003/allCountries.json').then(async (res) => {
+  // await fetch(urlConfig.cronUrl+`/allCountries.json`).then(async (res) => {
+  await fetch(`http://localhost:3003/allCountries.json`).then(async (res) => {
     const data = await res.json();
     allLocations = data.locations ?? [];
   }).catch((e) => {
@@ -197,11 +201,11 @@ app.get('/', (res, req) => {
   setCorsHeaders(res);
   res.writeHeader('Content-Type', 'text/html');
   res.writeStatus('200 OK');
-  res.end("WorldGuessr - Powered by uWebSockets.js<br>Headers: " + headerKb.toFixed(2) + 'kb');
+  res.end("WorldGuessr created by IncogCyberpunk - Powered by uWebSockets.js<br>Headers: " + headerKb.toFixed(2) + 'kb');
 });
 
 // maintenance mode
-if (process.env.MAINTENANCE_SECRET) {
+if (process.env?.MAINTENANCE_SECRET) {
   const maintenanceSecret = process.env.MAINTENANCE_SECRET;
   app.get(`/setmaintenance/${maintenanceSecret}/true`, (res) => {
     maintenanceMode = true;
@@ -294,7 +298,7 @@ setInterval(() => {
   ipDuelRequestsLast10.clear();
 }, 10000);
 
-app.ws('/wg', {
+app.ws('/', {
   /* Options */
   compression: uws.SHARED_COMPRESSOR,
   maxPayloadLength: 16 * 1024 * 1024,

@@ -103,7 +103,7 @@ export default function LeagueModal({ shown, onClose, session, eloData }) {
                 {/* League squares with names */}
                 <div className="league-container">
                     {Object.values(leagues).map((league) => {
-                        const isCurrentLeague = userLeague.name === league.name;
+                        const isCurrentLeague = userLeague?.name === league.name;
                         const nextLeague = Object.values(leagues).find(l => l.min === league.min);
                         const eloNeeded = nextLeague ? nextLeague.min : 0;
 

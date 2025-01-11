@@ -1,7 +1,7 @@
-import sendableMap from "../../components/utils/sendableMap.js";
-import Map from "../../models/Map.js";
-import User from "../../models/User.js";
-import officialCountryMaps from '../../public/officialCountryMaps.json' with { type: "json" };
+import sendableMap from "../../../components/utils/sendableMap.js";
+import Map from '../../../models/Map.js';
+import User from '../../../models/User.js';
+import officialCountryMaps from '../../../public/officialCountryMaps.json' with { type: "json" };
 
 let mapCache = {
   popular: {

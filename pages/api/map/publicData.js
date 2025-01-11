@@ -1,8 +1,8 @@
-import { getServerSecret } from "../../components/auth/serverAuth.js";
-import officialCountryMaps from "../../public/officialCountryMaps.json" with { type: "json" };
-import Map from "../../models/Map.js";
-import User from "../../models/User.js";
-import msToTime from "../../components/msToTime.js";
+import { getServerSecret } from "../../../components/auth/serverAuth.js";
+import officialCountryMaps from "../../../public/officialCountryMaps.json" with { type: "json" };
+import Map from '../../../models/Map.js';
+import User from '../../../models/User.js';
+import msToTime from "../../../components/msToTime.js";
 
 export default async function handler(req, res) {
   const slug = req.query.slug;

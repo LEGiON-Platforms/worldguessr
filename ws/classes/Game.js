@@ -11,7 +11,7 @@ import lookup from "coordinate_to_country";
 import calcPoints from "../../components/calcPoints.js";
 import { boundingExtent } from "ol/extent.js";
 import { fromLonLat } from "ol/proj.js";
-import { setElo } from "../../api/eloRank.js";
+import { setElo } from "../../pages/api/eloRank.js";
 
 export default class Game {
   constructor(id, publicLobby, location="all", rounds=5, allLocations) {

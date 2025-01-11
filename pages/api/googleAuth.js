@@ -1,28 +1,38 @@
 
-import { createUUID } from "../components/createUUID.js";
-import User from "../models/User.js";
+import mongoose from "mongoose";
+import { createUUID } from "../../components/createUUID.js";
+import User from '../../models/User.js';
 import { Webhook } from "discord-webhook-node";
 import { OAuth2Client } from "google-auth-library";
 
 const client = new OAuth2Client(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, 'postmessage');
 
 export default async function handler(req, res) {
+  console.log("For googleAuth, the mongod_db uri is ${process")
+
   let output = {};
   // only accept post
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
+  await mongoose.connect(process.env.MONGODB).then(() => {
+    console.log("Connected to MongoDB")
+  }
+  )
 
   const { code, secret } = req.body;
   if (!code) {
     if (!secret) {
+      console.log(`secret missing `)
       return res.status(400).json({ error: 'Invalid' });
     }
 
+
+
     const userDb = await User.findOne({
       secret,
-    }).select("secret username email staff canMakeClues supporter").cache(120);
+    }).select("secret username email staff canMakeClues supporter");
     if (userDb) {
       output = { secret: userDb.secret, username: userDb.username, email: userDb.email, staff: userDb.staff, canMakeClues: userDb.canMakeClues, supporter: userDb.supporter };
       if (!userDb.username || userDb.username.length < 1) {
@@ -50,7 +60,8 @@ export default async function handler(req, res) {
     const ticket = await client.verifyIdToken({
       idToken: tokens.id_token,
       audience: clientId,
-      redirectUri: 'worldguessr.com',
+      //  CHANGE REDIRECT TO WHATEVER URL U WANT
+      redirectUri: 'worldguessr.netlify.app',
     });
 
     if (!ticket) {

@@ -1,5 +1,5 @@
-import Map from '../../models/Map.js';
-import User from '../../models/User.js';
+import Map from '../../../models/Map.js';
+import User from '../../../models/User.js';
 
 const HEART_COOLDOWN = 500;
 let recentHearts = {}

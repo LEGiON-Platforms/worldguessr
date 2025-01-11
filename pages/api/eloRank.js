@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import User from '../models/User.js';
-import { getLeague } from '../components/utils/leagues.js';
+import User from '../../models/User.js';
+import { getLeague } from '../../components/utils/leagues.js';
 
 // given a username return the elo and the rank of the user
 export default async function handler(req, res) {

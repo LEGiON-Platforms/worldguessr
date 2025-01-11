@@ -57,6 +57,9 @@ import HomeContent from "./homeContent/mainContent/homeContent";
 import Sidebar from "./homeContent/sideBar/sideBar";
 
 
+import urlConfig from "@/clientConfig";
+
+
 const initialMultiplayerState = {
   connected: false,
   connecting: false,
@@ -169,17 +172,17 @@ export default function Home() {
   if (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     login = useGoogleLogin({
-      onSuccess:  tokenResponse => {
-        console.log(`The apiUrl for login in ${process.env.NODE_PUBLIC_ENV} is `,clientConfig().apiUrl + "/api/googleAuth")
+      onSuccess: tokenResponse => {
+        console.log(`The apiUrl for login in ${process.env.NEXT_PUBLIC_ENV} is `, clientConfig().apiUrl + "/api/googleAuth")
         fetch(clientConfig().apiUrl + "/api/googleAuth", {
           body: JSON.stringify({ code: tokenResponse.code }),
           method: "POST",
           headers: {
             'Content-Type': 'application/json',
-            "Credentials":"include",
+            "Credentials": "include",
           }
-        }).then( (res) => res.json()).then((data) => {
-          console.log(`Data received from googleAuth api is `,data)
+        }).then((res) => res.json()).then((data) => {
+          console.log(`Data received from googleAuth api is `, data)
           if (data.secret) {
             setSession({ token: data })
             window.localStorage.setItem("wg_secret", data.secret)
@@ -201,8 +204,10 @@ export default function Home() {
         toast.error("Login error, contact support if this persists (1)\n\nMake sure popups are enabled (needed for google window)")
 
       },
-      flow: "auth-code",
-
+      flow: "auth-code", // Ensure secure exchange of authorization code for tokens
+      auto_select: true,
+      prompt: "select_account", // Key option to avoid the consent screen for returning users
+      scope: "openid email profile",
     });
 
     if (typeof window !== "undefined") window.login = login;
@@ -937,8 +942,10 @@ export default function Home() {
           connecting: true,
           shouldConnect: false
         }))
-        const ws = await initWebsocket(clientConfig().websocketUrl, null, 5000, 20)
-        console.log(`The websocket url is `,clientConfig().websocketUrl)
+
+        console.log(`The websocketUrl before calling initWebSocket is `, urlConfig().websocketUrl)
+        const ws = await initWebsocket(urlConfig().websocketUrl, null, 5000, 20)
+        console.log(`The websocket ws after initializing webSocket is`, ws)
         if (ws && ws.readyState === 1) {
           setWs(ws)
           setMultiplayerState((prev) => ({

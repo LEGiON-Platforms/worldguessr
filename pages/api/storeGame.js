@@ -1,9 +1,9 @@
 // import calcPoints from '@/components/calcPoints';
 // import storeGame from '@/components/storeGame';
 // import ratelimiter from '@/components/utils/ratelimitMiddleware'
-import calcPoints from '../components/calcPoints.js';
-import storeGame from '../components/storeGame.js';
-import ratelimiter from '../components/utils/ratelimitMiddleware.js';
+import calcPoints from '../../components/calcPoints.js';
+import storeGame from '../../components/storeGame.js';
+import ratelimiter from '../../components/utils/ratelimitMiddleware.js';
 
 // multiplayer after guess
 async function guess(req, res) {

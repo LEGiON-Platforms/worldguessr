@@ -6,14 +6,14 @@
 
 // import countries from '@/public/countries.json';
 // import officialCountryMaps from '@/public/officialCountryMaps.json';
-import mapConst from '../../components/maps/mapConst.js';
-import parseMapData from '../../components/utils/parseMapData.js';
-import generateSlug from '../../components/utils/slugGenerator.js';
-import Map from '../../models/Map.js';
-import User from '../../models/User.js';
+import mapConst from '../../../components/maps/mapConst.js';
+import parseMapData from '../../../components/utils/parseMapData.js';
+import generateSlug from '../../../components/utils/slugGenerator.js';
+import Map from '../../../models/Map.js';
+import User from '../../../models/User.js';
 
-import countries from '../../public/countries.json' with { type: "json" };
-import officialCountryMaps from '../../public/officialCountryMaps.json' with { type: "json" };
+import countries from '../../../public/countries.json' with { type: "json" };
+import officialCountryMaps from '../../../public/officialCountryMaps.json' with { type: "json" };
 
 // Function to convert latitude and longitude to Cartesian coordinates
 function latLngToCartesian(lat, lng) {
