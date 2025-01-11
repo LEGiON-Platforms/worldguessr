@@ -1,4 +1,4 @@
-import Clue from '../../models/Clue.js';
+import Clue from '../../../models/Clue.js';
 
 let clueCountCache = {
   count: 0,
